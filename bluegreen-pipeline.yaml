@@ -44,6 +44,8 @@ spec:
             }
             sh "oc get route ${tag} -n ${project} -o jsonpath='{ .spec.host }' > routehost"
             routeHost = readFile('routehost').trim()
+            sh "oc get route main -n ${project} -o jsonpath='{ .spec.host }' > routehost"
+            routeHostMain = readFile('routehost').trim()
           }
 
           stage("Build") {
@@ -57,7 +59,7 @@ spec:
           }
 
           stage("Test") {
-            input message: "New build is ready, please select OK and test the new ${tag} deployment  ?", id: "approval", ok: "Ok"
+            input message: "Build is ready, select OK and test the ${tag} deployment at ${routeHostMain} .", id: "approval", ok: "Ok"
           }
 
           stage("Go Live") {
@@ -70,11 +72,11 @@ spec:
             routeHost = readFile('routehost').trim()
             def patch2 = $/oc patch route/main -p $'{\"spec\":{\"to\":{\"name\":\"${altTag}\"}}}$' -n ${project}/$            
             try {
-              input message: "Would you like to rollback the deployment to ${altTag} ? ", id: "approval", ok: "Rollback"
-              echo "rolling back to ${tag}"
-              sh patch2
+              input message: "Would you like Keep ${tag} or Abort rollback the deployment to ${altTag} ? ", id: "approval", ok: "Keep"
+              echo "keeping ${tag}"
             } catch (error) {
-              echo "rollback aborted"
+              echo "rolling back to ${altTag}"
+              sh patch2
             }
           }
         }
