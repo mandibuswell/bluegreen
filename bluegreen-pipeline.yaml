@@ -72,7 +72,7 @@ spec:
             routeHost = readFile('routehost').trim()
             def patch2 = $/oc patch route/main -p $'{\"spec\":{\"to\":{\"name\":\"${altTag}\"}}}$' -n ${project}/$            
             try {
-              input message: "Would you like Keep ${tag} or Abort rollback the deployment to ${altTag} ? ", id: "approval", ok: "Keep"
+              input message: "Would you like Keep ${tag} or Abort to rollback the deployment to ${altTag} ? ", id: "approval", ok: "Keep"
               echo "keeping ${tag}"
             } catch (error) {
               echo "rolling back to ${altTag}"
