@@ -57,7 +57,7 @@ spec:
           }
 
           stage("Test") {
-            input message: "New build is ready, please test the new ${tag} deployment  ?", id: "approval"
+            input message: "New build is ready, please select OK and test the new ${tag} deployment  ?", id: "approval", ok: "Ok"
           }
 
           stage("Go Live") {
@@ -70,7 +70,7 @@ spec:
             routeHost = readFile('routehost').trim()
             def patch2 = $/oc patch route/main -p $'{\"spec\":{\"to\":{\"name\":\"${altTag}\"}}}$' -n ${project}/$            
             try {
-              input message: "Would you like to rollback the deployment to ${altTag} ? Select PROCEED or Keep this new ${tag} deployment Select ABORT", id: "approval"
+              input message: "Would you like to rollback the deployment to ${altTag} ? ", id: "approval", ok: "Rollback"
               echo "rolling back to ${tag}"
               sh patch2
             } catch (error) {
