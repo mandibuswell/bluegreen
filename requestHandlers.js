@@ -30,7 +30,12 @@ function start(response) {
         '</body>'+
         '</html>';
 
-    response.writeHead(200, {"Content-Type": "text/html"});
+    response.writeHead(200, {"Content-Type": "text/html",
+                              'Accept-Ranges': 'bytes',
+                             'Cache-Control': 'no-cache',
+                             'Expires': '-1',
+                             'Pragma': 'no-cache'
+                            });
     response.write(body);
     response.end();
 }
