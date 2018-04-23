@@ -59,7 +59,7 @@ spec:
           }
 
           stage("Test") {
-            input message: "Build is ready, select OK and test the ${tag} deployment at ${routeHostMain} .", id: "approval", ok: "Ok"
+            input message: "Build of ${tag} is ready, select OK to deploy this build to ${routeHostMain} for testing.", id: "approval", ok: "Ok"
           }
 
           stage("Go Live") {
